@@ -1,18 +1,15 @@
-from smolagents import CodeAgent, DuckDuckGoSearchTool, VisitWebpageTool
-from smolagents.models import OpenAIServerModel
-
-model = OpenAIServerModel(
-    model_id="llama3",
-    api_base="http://localhost:11434/v1",
-    api_key="ollama"
+# Create web agent and manager agent structure
+web_agent = ToolCallingAgent(
+    tools=[],           # Add required tools
+    model=None,         # Add model
+    max_steps=5,        # Adjust steps
+    name="",           # Add name
+    description=""      # Add description
 )
 
-agent = CodeAgent(
-    tools=[
-        DuckDuckGoSearchTool(),
-        VisitWebpageTool()
-    ],
-    model=model
+manager_agent = CodeAgent(
+     model=InferenceClientModel(),
+    tools=[],
+    managed_agents=[web_agent],
+    max_steps=15,
 )
-
-agent.run("Whats the owner of google")

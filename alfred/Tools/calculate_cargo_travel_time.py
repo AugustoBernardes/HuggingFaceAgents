@@ -1,16 +1,6 @@
 import math
+from smolagents import  tool
 from typing import Optional, Tuple
-from dotenv import load_dotenv
-import os
-
-from PIL import Image
-from smolagents import CodeAgent, GoogleSearchTool, InferenceClientModel, VisitWebpageTool, tool, DuckDuckGoSearchTool
-
-load_dotenv()
-
-SERPAPI_API_KEY = os.getenv("SERPAPI_API_KEY")
-
-print(SERPAPI_API_KEY)
 
 @tool
 def calculate_cargo_travel_time(
@@ -37,9 +27,11 @@ def calculate_cargo_travel_time(
     def to_radians(degrees: float) -> float:
         return degrees * (math.pi / 180)
 
+    # Extract coordinates
     lat1, lon1 = map(to_radians, origin_coords)
     lat2, lon2 = map(to_radians, destination_coords)
 
+    # Earth's radius in kilometers
     EARTH_RADIUS_KM = 6371.0
 
     # Calculate great-circle distance using the haversine formula
@@ -62,27 +54,3 @@ def calculate_cargo_travel_time(
 
     # Format the results
     return round(flight_time, 2)
-
-model = InferenceClientModel(
-    model_id="Qwen/Qwen2.5-Coder-32B-Instruct", provider="together", max_tokens=8096
-)
-
-web_agent = CodeAgent(
-    model=model,
-    tools=[
-        GoogleSearchTool(provider="serper"),
-        VisitWebpageTool(),
-        calculate_cargo_travel_time,
-    ],
-    name="web_agent",
-    description="Browses the web to find information",
-    verbosity_level=0,
-    max_steps=10,
-)
-
-task = """Find all Batman filming locations in the world, calculate the time to transfer via cargo plane to here (we're in Gotham, 40.7128° N, 74.0060° W), and return them to me as a pandas dataframe.
-Also give me some supercar factories with the same cargo plane transfer time."""
-
-result = web_agent.run(task)
-
-print(calculate_cargo_travel_time((41.8781, -87.6298), (-33.8688, 151.2093)))
