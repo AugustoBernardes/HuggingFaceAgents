@@ -9,7 +9,7 @@ from llama_index.core.tools import QueryEngineTool
 
 async def build_nhl_tool(llm):
     # Initialize a persistent ChromaDB client to store and retrieve vector embeddings
-    db = chromadb.PersistentClient(path="./db")
+    db = chromadb.PersistentClient(path="./LlamaIndex/db")
 
     # Get or create a collection dedicated to NHL-related data
     collection = db.get_or_create_collection("nhl")
@@ -21,7 +21,7 @@ async def build_nhl_tool(llm):
     embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
 
     # Load raw documents from the local NHL data directory
-    documents = SimpleDirectoryReader(input_dir="./data/nhl").load_data()
+    documents = SimpleDirectoryReader(input_dir="./LlamaIndex/data/nhl").load_data()
 
     # Create an ingestion pipeline to process and store documents into the vector database
     pipeline = IngestionPipeline(

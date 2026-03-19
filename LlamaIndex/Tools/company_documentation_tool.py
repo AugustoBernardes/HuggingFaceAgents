@@ -8,12 +8,12 @@ from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.core.tools import QueryEngineTool
 
 async def build_company_documentation_tool(llm):
-    db = chromadb.PersistentClient(path="./db")
+    db = chromadb.PersistentClient(path="./LlamaIndex/db")
     collection = db.get_or_create_collection("documentation")
     vector_store = ChromaVectorStore(chroma_collection=collection)
     embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
 
-    documents = SimpleDirectoryReader(input_dir="./data/documentation").load_data()
+    documents = SimpleDirectoryReader(input_dir="./LlamaIndex/data/documentation").load_data()
 
     pipeline = IngestionPipeline(
         transformations=[
