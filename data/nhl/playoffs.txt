@@ -1,5 +1,6 @@
 This is NHL list of teams on playoff:
-
 Canucks
 Penguins
 Blue Jackets
+Florida Phanters
+Boston Bruins
