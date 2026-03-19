@@ -1,8 +1,8 @@
 import asyncio
 
 from llama_index.core.agent.workflow import AgentWorkflow
-
 from llama_index.llms.huggingface_api import HuggingFaceInferenceAPI
+from llama_index.core.workflow import Context
 
 # Tools
 from llama_index.core.tools import FunctionTool
@@ -31,13 +31,15 @@ async def main():
         verbose=False
     )
 
-    hockey_response = await agent.run(user_msg="What teams are on NHL playoffs ?")
+    context = Context(agent)
+
+    hockey_response = await agent.run(user_msg="Hello my name is Augusto and i would like to know the teams that are on NHL playoffs ?", ctx=context)
     print(hockey_response)
 
-    company_docs = await agent.run(user_msg="Whats the owner of this company ? Whats the company goals ?")
+    company_docs = await agent.run(user_msg="Whats the owner of this company ? Whats the company goals ?", ctx=context)
     print(company_docs)
 
-    weather_response = await agent.run(user_msg="Whats the weather in Quirinoópolis today ?")
+    weather_response = await agent.run(user_msg="Whats the weather in Quirinoópolis today ? And whats my name ?", ctx=context)
     print(weather_response)
 
 asyncio.run(main())
